@@ -534,11 +534,6 @@
     only('screen-main');
   });
 
-  // ── service worker ────────────────────────────────────
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(console.warn);
-  }
-
   // ── INIT ──────────────────────────────────────────────
   const token = getToken();
   if (!token) {
