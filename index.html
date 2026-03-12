@@ -370,12 +370,12 @@
   // ⚠️  SUBSTITUA PELAS SUAS CREDENCIAIS DO FIREBASE
   // ─────────────────────────────────────────────────────
   const firebaseConfig = {
-    apiKey: "AIzaSyBDidrDBQC5dvRJGGKMtNffrV867dNgDK8",
-    authDomain: "patrulha-maria-da-penha.firebaseapp.com",
-    projectId: "patrulha-maria-da-penha",
-    storageBucket: "patrulha-maria-da-penha.firebasestorage.app",
-    messagingSenderId: "698468798170",
-    appId: "1:698468798170:web:fc881c819ead0e34c11fe3"
+    apiKey:            "SUA_API_KEY",
+    authDomain:        "SEU_PROJETO.firebaseapp.com",
+    projectId:         "SEU_PROJETO",
+    storageBucket:     "SEU_PROJETO.appspot.com",
+    messagingSenderId: "SEU_SENDER_ID",
+    appId:             "SEU_APP_ID",
   };
   // ─────────────────────────────────────────────────────
 
@@ -417,9 +417,9 @@
   }
 
   // ── load assistida by token ───────────────────────────
+  // Lê APENAS de panic_tokens (público) — sem precisar de login
   async function loadAssistida(token) {
     try {
-      // O token é o ID do documento em 'panic_tokens'
       const tokenRef = doc(db, 'panic_tokens', token);
       const tokenSnap = await getDoc(tokenRef);
 
@@ -434,21 +434,12 @@
         return;
       }
 
-      const assistidaId = tokenData.idAssistida;
-      const assistidaRef = doc(db, 'assistidas', assistidaId);
-      const assistidaSnap = await getDoc(assistidaRef);
-
-      if (!assistidaSnap.exists()) {
-        showError('Cadastro não encontrado. Contate a equipe.');
-        return;
-      }
-
       assistidaData = {
-        id: assistidaSnap.id,
+        id:           tokenData.idAssistida,
         token,
-        ...assistidaSnap.data(),
-        guarnicaoTel: tokenData.guarnicaoTel || assistidaSnap.data()?.guarnicaoTel || null,
-        guarnicaoNome: tokenData.guarnicaoNome || assistidaSnap.data()?.guarnicao || null,
+        nomeCompleto: tokenData.nomeAssistida || '',
+        guarnicaoTel:  tokenData.guarnicaoTel  || null,
+        guarnicaoNome: tokenData.guarnicaoNome || null,
       };
 
       renderMain();
