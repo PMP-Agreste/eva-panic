@@ -185,7 +185,16 @@
 
   function getToken() {
     const p = new URLSearchParams(location.search);
-    return p.get('token') || p.get('t') || null;
+    const tokenFromUrl = p.get('token') || p.get('t') || null;
+  
+    if (tokenFromUrl) {
+      // Salva o token para acessos futuros (ícone da tela inicial)
+      localStorage.setItem('eva_panic_token', tokenFromUrl);
+      return tokenFromUrl;
+    }
+  
+    // Sem token na URL — tenta recuperar do armazenamento local
+    return localStorage.getItem('eva_panic_token') || null;
   }
 
   function formatPhone(tel) {
