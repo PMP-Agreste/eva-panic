@@ -37,7 +37,7 @@
     .hd-sub { font-size:12px; color:var(--muted); margin-top:2px; letter-spacing:0.03em; }
     .btn-area { display:flex; flex-direction:column; align-items:center; gap:20px; }
     .panic-wrap { position:relative; }
-    .panic-wrap::before, .panic-wrap::after { content:''; position:absolute; inset:-20px; border-radius:50%; border:2px solid var(--red); opacity:0; animation:pulse-ring 2.8s ease-out infinite; }
+    .panic-wrap::before, .panic-wrap::after { content:''; position:absolute; inset:-20px; border-radius:50%; border:2px solid var(--red); opacity:0; animation:pulse-ring 2.8s ease-out infinite; pointer-events: none }
     .panic-wrap::after { animation-delay:1.4s; }
     @keyframes pulse-ring { 0% { transform:scale(0.85); opacity:0.6; } 100% { transform:scale(1.5); opacity:0; } }
     .btn-panic { position:relative; width:220px; height:220px; border-radius:50%; border:none; cursor:pointer; background:radial-gradient(circle at 35% 30%,#e84040,var(--red) 50%,var(--red-dark)); box-shadow:0 0 0 6px rgba(212,43,43,0.15),0 0 60px var(--red-glow),0 20px 60px rgba(0,0,0,0.6),inset 0 2px 8px rgba(255,255,255,0.12),inset 0 -4px 12px rgba(0,0,0,0.4); transition:transform 0.1s,box-shadow 0.1s; -webkit-tap-highlight-color:transparent; user-select:none; }
