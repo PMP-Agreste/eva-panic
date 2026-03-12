@@ -1,0 +1,34 @@
+// firestore.rules — adicione estas regras ao seu projeto Firebase
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Tokens de pânico ──────────────────────────────────────────
+    // Qualquer pessoa com o ID do token pode ler (para validar o link)
+    // Apenas admins/gestores podem criar/editar tokens
+    match /panic_tokens/{tokenId} {
+      allow read: if true;  // necessário para o PWA validar o link sem login
+      allow write: if request.auth != null &&
+        get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.role in ['admin', 'gestor'];
+    }
+
+    // ── Alertas de pânico ─────────────────────────────────────────
+    // Qualquer pessoa pode CRIAR um alerta (o PWA não tem login)
+    // Apenas admins/gestores podem LER e atualizar alertas
+    match /alertas_panico/{alertaId} {
+      allow create: if true;
+      allow read, update: if request.auth != null &&
+        get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.role in ['admin', 'gestor'];
+    }
+
+    // ── Assistidas ────────────────────────────────────────────────
+    // Leitura pública necessária para o PWA carregar dados da assistida via token
+    // ATENÇÃO: se quiser mais segurança, use Cloud Functions no lugar da leitura direta
+    match /assistidas/{assistidaId} {
+      allow read: if true;  // restringir via Cloud Function para maior segurança
+      allow write: if request.auth != null &&
+        get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.role in ['admin', 'gestor'];
+    }
+  }
+}
