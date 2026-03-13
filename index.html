@@ -10,94 +10,294 @@
   <meta name="apple-mobile-web-app-title" content="Eva Pânico" />
   <link rel="manifest" href="manifest.json" />
   <title>Eva — Botão de Pânico</title>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap');
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --red: #d42b2b; --red-dark: #8b0000; --red-glow: rgba(212,43,43,0.45);
-      --bg: #080808; --surface: #111111; --border: rgba(255,255,255,0.07);
-      --text: #f0f0f0; --muted: #888; --green: #27ae60;
-      --safe-top: env(safe-area-inset-top,0px); --safe-bot: env(safe-area-inset-bottom,0px);
+      --red:      #d42b2b;
+      --red-dark: #8b0000;
+      --red-glow: rgba(212, 43, 43, 0.45);
+      --bg:       #080808;
+      --surface:  #111111;
+      --border:   rgba(255,255,255,0.07);
+      --text:     #f0f0f0;
+      --muted:    #888;
+      --green:    #27ae60;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bot: env(safe-area-inset-bottom, 0px);
     }
-    html, body { height:100%; width:100%; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; overflow:hidden; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
-    .screen { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:calc(var(--safe-top) + 24px) 24px calc(var(--safe-bot) + 24px); transition:opacity 0.3s,transform 0.3s; }
-    .screen.hidden { opacity:0; pointer-events:none; transform:scale(0.97); }
-    #screen-loading { gap:16px; }
-    .loader-ring { width:52px; height:52px; border:3px solid var(--border); border-top-color:var(--red); border-radius:50%; animation:spin 0.9s linear infinite; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    .loader-text { color:var(--muted); font-size:14px; letter-spacing:0.05em; }
-    #screen-error { gap:12px; text-align:center; }
-    .error-icon { font-size:48px; line-height:1; }
-    .error-title { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--red); letter-spacing:0.05em; }
-    .error-msg { color:var(--muted); font-size:14px; max-width:280px; line-height:1.6; }
-    #screen-main { gap:0; justify-content:space-between; background:radial-gradient(ellipse at center bottom,rgba(139,0,0,0.18) 0%,transparent 70%); }
-    .hd { width:100%; display:flex; flex-direction:column; align-items:center; gap:4px; padding-top:8px; }
-    .hd-logo { font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:0.25em; color:var(--muted); }
-    .hd-name { font-size:20px; font-weight:700; color:var(--text); max-width:260px; text-align:center; line-height:1.2; }
-    .hd-sub { font-size:12px; color:var(--muted); margin-top:2px; letter-spacing:0.03em; }
-    .btn-area { display:flex; flex-direction:column; align-items:center; gap:20px; }
-    .panic-wrap { position:relative; }
-<<<<<<< HEAD
-    .panic-wrap::before, .panic-wrap::after { content:''; position:absolute; inset:-20px; border-radius:50%; border:2px solid var(--red); opacity:0; animation:pulse-ring 2.8s ease-out infinite; pointer-events: none }
-=======
-    .panic-wrap::before, .panic-wrap::after { content:''; position:absolute; inset:-20px; border-radius:50%; border:2px solid var(--red); opacity:0; animation:pulse-ring 2.8s ease-out infinite; pointer-events:none; }
->>>>>>> 1881571 (atualização safari)
-    .panic-wrap::after { animation-delay:1.4s; }
-    @keyframes pulse-ring { 0% { transform:scale(0.85); opacity:0.6; } 100% { transform:scale(1.5); opacity:0; } }
-    .btn-panic { position:relative; width:220px; height:220px; border-radius:50%; border:none; cursor:pointer; background:radial-gradient(circle at 35% 30%,#e84040,var(--red) 50%,var(--red-dark)); box-shadow:0 0 0 6px rgba(212,43,43,0.15),0 0 60px var(--red-glow),0 20px 60px rgba(0,0,0,0.6),inset 0 2px 8px rgba(255,255,255,0.12),inset 0 -4px 12px rgba(0,0,0,0.4); transition:transform 0.1s,box-shadow 0.1s; -webkit-tap-highlight-color:transparent; user-select:none; }
-    .btn-panic:active { transform:scale(0.94); box-shadow:0 0 0 6px rgba(212,43,43,0.1),0 0 30px var(--red-glow),0 8px 30px rgba(0,0,0,0.6),inset 0 4px 12px rgba(0,0,0,0.4); }
-    .btn-panic-inner { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:8px; }
-    .btn-panic-icon { font-size:52px; line-height:1; }
-    .btn-panic-label { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:0.12em; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,0.5); }
-    .btn-panic-sub { font-size:11px; font-weight:500; color:rgba(255,255,255,0.7); letter-spacing:0.05em; text-transform:uppercase; }
-    .btn-hint { font-size:12px; color:var(--muted); text-align:center; max-width:200px; line-height:1.5; }
-    .footer-actions { width:100%; display:flex; flex-direction:column; gap:10px; }
-    .btn-call { width:100%; padding:16px; border-radius:14px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.15s,border-color 0.15s; -webkit-tap-highlight-color:transparent; }
-    .btn-call:active { background:#1a1a1a; }
-    .btn-call.btn-190 { border-color:rgba(212,43,43,0.3); }
-    .btn-call .call-num { font-size:18px; font-family:'Bebas Neue',sans-serif; letter-spacing:0.1em; }
-    .btn-call .call-label { font-size:11px; font-weight:500; color:var(--muted); }
-    .btn-call-content { display:flex; flex-direction:column; align-items:flex-start; }
-    #screen-sent { gap:20px; text-align:center; }
-    .sent-ring { width:120px; height:120px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#2ecc71,var(--green)); box-shadow:0 0 60px rgba(39,174,96,0.4),0 20px 60px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; font-size:52px; animation:pop-in 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
-    @keyframes pop-in { from { transform:scale(0.5); opacity:0; } to { transform:scale(1); opacity:1; } }
-    .sent-title { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:0.08em; color:var(--green); }
-    .sent-msg { font-size:14px; color:var(--muted); max-width:260px; line-height:1.7; }
-    .sent-gps { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; font-size:12px; color:var(--muted); font-family:monospace; text-align:left; max-width:100%; word-break:break-all; }
-    .sent-gps strong { color:var(--text); }
-    .sent-actions { width:100%; display:flex; flex-direction:column; gap:10px; margin-top:8px; }
-    .btn-back { width:100%; padding:14px; border-radius:14px; border:1px solid var(--border); background:transparent; color:var(--muted); font-family:'DM Sans',sans-serif; font-size:14px; cursor:pointer; transition:color 0.15s; }
-    .btn-back:active { color:var(--text); }
-    #screen-sending { gap:16px; }
-    .sending-text { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:0.1em; color:var(--red); }
-    .sending-sub { font-size:13px; color:var(--muted); }
+
+    html, body {
+      height: 100%; width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    /* ── SCREENS ─────────────────────────────────────── */
+    .screen {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: calc(var(--safe-top) + 24px) 24px calc(var(--safe-bot) + 24px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .screen.hidden { opacity: 0; pointer-events: none; transform: scale(0.97); }
+
+    /* ── LOADING ─────────────────────────────────────── */
+    #screen-loading { gap: 16px; }
+    .loader-ring {
+      width: 52px; height: 52px;
+      border: 3px solid var(--border);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text { color: var(--muted); font-size: 14px; letter-spacing: 0.05em; }
+
+    /* ── ERROR ───────────────────────────────────────── */
+    #screen-error { gap: 12px; text-align: center; }
+    .error-icon { font-size: 48px; line-height: 1; }
+    .error-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--red); letter-spacing: 0.05em; }
+    .error-msg { color: var(--muted); font-size: 14px; max-width: 280px; line-height: 1.6; }
+
+    /* ── MAIN ────────────────────────────────────────── */
+    #screen-main {
+      gap: 0;
+      justify-content: space-between;
+      background: radial-gradient(ellipse at center bottom, rgba(139,0,0,0.18) 0%, transparent 70%);
+    }
+
+    /* Header */
+    .hd {
+      width: 100%; display: flex; flex-direction: column; align-items: center;
+      gap: 4px; padding-top: 8px;
+    }
+    .hd-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 15px; letter-spacing: 0.25em;
+      color: var(--muted);
+    }
+    .hd-name {
+      font-size: 20px; font-weight: 700; color: var(--text);
+      max-width: 260px; text-align: center; line-height: 1.2;
+    }
+    .hd-sub {
+      font-size: 12px; color: var(--muted);
+      margin-top: 2px; letter-spacing: 0.03em;
+    }
+
+    /* Panic button area */
+    .btn-area {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 20px;
+    }
+
+    /* ── THE BUTTON ──────────────────────────────────── */
+    .panic-wrap { position: relative; }
+
+    /* Pulse rings */
+    .panic-wrap::before,
+    .panic-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      border: 2px solid var(--red);
+      opacity: 0;
+      animation: pulse-ring 2.8s ease-out infinite;
+    }
+    .panic-wrap::after { animation-delay: 1.4s; }
+
+    @keyframes pulse-ring {
+      0%   { transform: scale(0.85); opacity: 0.6; }
+      100% { transform: scale(1.5);  opacity: 0; }
+    }
+
+    .btn-panic {
+      position: relative;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: radial-gradient(circle at 35% 30%, #e84040, var(--red) 50%, var(--red-dark));
+      box-shadow:
+        0 0 0 6px rgba(212,43,43,0.15),
+        0 0 60px var(--red-glow),
+        0 20px 60px rgba(0,0,0,0.6),
+        inset 0 2px 8px rgba(255,255,255,0.12),
+        inset 0 -4px 12px rgba(0,0,0,0.4);
+      transition: transform 0.1s, box-shadow 0.1s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .btn-panic:active {
+      transform: scale(0.94);
+      box-shadow:
+        0 0 0 6px rgba(212,43,43,0.1),
+        0 0 30px var(--red-glow),
+        0 8px 30px rgba(0,0,0,0.6),
+        inset 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .btn-panic-inner {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 100%; gap: 8px;
+    }
+    .btn-panic-icon { font-size: 52px; line-height: 1; }
+    .btn-panic-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px; letter-spacing: 0.12em;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .btn-panic-sub {
+      font-size: 11px; font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+
+    .btn-hint {
+      font-size: 12px; color: var(--muted);
+      text-align: center; max-width: 200px; line-height: 1.5;
+    }
+
+    /* Footer actions */
+    .footer-actions {
+      width: 100%; display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .btn-call {
+      width: 100%; padding: 16px;
+      border-radius: 14px; border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.15s, border-color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-call:active { background: #1a1a1a; }
+    .btn-call.btn-190 { border-color: rgba(212,43,43,0.3); }
+    .btn-call .call-num { font-size: 18px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.1em; }
+    .btn-call .call-label { font-size: 11px; font-weight: 500; color: var(--muted); }
+    .btn-call-content { display: flex; flex-direction: column; align-items: flex-start; }
+
+    /* ── SENT ────────────────────────────────────────── */
+    #screen-sent { gap: 20px; text-align: center; }
+
+    .sent-ring {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #2ecc71, var(--green));
+      box-shadow: 0 0 60px rgba(39,174,96,0.4), 0 20px 60px rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 52px;
+      animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes pop-in {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .sent-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; letter-spacing: 0.08em; color: var(--green);
+    }
+    .sent-msg { font-size: 14px; color: var(--muted); max-width: 260px; line-height: 1.7; }
+
+    .sent-gps {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 12px; color: var(--muted);
+      font-family: monospace; text-align: left;
+      max-width: 100%; word-break: break-all;
+    }
+    .sent-gps strong { color: var(--text); }
+
+    .sent-actions {
+      width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 8px;
+    }
+
+    .btn-back {
+      width: 100%; padding: 14px;
+      border-radius: 14px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      cursor: pointer; transition: color 0.15s;
+    }
+    .btn-back:active { color: var(--text); }
+
+    /* ── GPS TAG ─────────────────────────────────────── */
+    .gps-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(39,174,96,0.1);
+      border: 1px solid rgba(39,174,96,0.25);
+      border-radius: 6px; padding: 4px 10px;
+      font-size: 11px; color: #2ecc71;
+      font-weight: 500; letter-spacing: 0.03em;
+    }
+    .gps-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #2ecc71; animation: blink 1.4s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    /* ── SENDING OVERLAY ─────────────────────────────── */
+    #screen-sending { gap: 16px; }
+    .sending-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: 0.1em; color: var(--red);
+    }
+    .sending-sub { font-size: 13px; color: var(--muted); }
+
+    /* Divider */
+    .divider {
+      width: 100%; height: 1px; background: var(--border); margin: 2px 0;
+    }
   </style>
 </head>
 <body>
 
+<!-- LOADING -->
 <div class="screen" id="screen-loading">
   <div class="loader-ring"></div>
   <p class="loader-text">Carregando…</p>
 </div>
 
+<!-- ERROR -->
 <div class="screen hidden" id="screen-error">
   <div class="error-icon">⚠️</div>
   <p class="error-title">Link inválido</p>
   <p class="error-msg" id="error-msg">Este link não é válido ou expirou. Entre em contato com a equipe da Patrulha Maria da Penha.</p>
 </div>
 
+<!-- SENDING -->
 <div class="screen hidden" id="screen-sending">
-  <div class="loader-ring" style="border-top-color:var(--red);width:64px;height:64px;border-width:4px"></div>
+  <div class="loader-ring" style="border-top-color: var(--red); width:64px; height:64px; border-width:4px"></div>
   <p class="sending-text">Enviando alerta…</p>
   <p class="sending-sub">Capturando localização GPS</p>
 </div>
 
+<!-- MAIN -->
 <div class="screen hidden" id="screen-main">
   <div class="hd">
     <span class="hd-logo">PATRULHA MARIA DA PENHA</span>
     <span class="hd-name" id="nome-assistida">—</span>
     <span class="hd-sub" id="guarnicao-assistida"></span>
   </div>
+
   <div class="btn-area">
     <div class="panic-wrap">
       <button class="btn-panic" id="btn-panic" aria-label="Acionar botão de pânico">
@@ -110,6 +310,7 @@
     </div>
     <p class="btn-hint">Toque no botão para enviar sua localização e acionar a equipe imediatamente.</p>
   </div>
+
   <div class="footer-actions">
     <button class="btn-call btn-190" id="btn-190" aria-label="Ligar para 190">
       <span style="font-size:20px">📞</span>
@@ -128,14 +329,17 @@
   </div>
 </div>
 
+<!-- SENT -->
 <div class="screen hidden" id="screen-sent">
   <div class="sent-ring">✓</div>
   <p class="sent-title">Alerta enviado!</p>
   <p class="sent-msg">Sua localização foi registrada e a equipe foi acionada. <strong>Ligue imediatamente para o 190</strong> se precisar de ajuda policial.</p>
+
   <div id="gps-info" class="sent-gps" style="display:none">
     <strong>📍 Localização capturada</strong><br>
     <span id="gps-coords"></span>
   </div>
+
   <div class="sent-actions">
     <button class="btn-call btn-190" id="btn-190-sent" aria-label="Ligar para 190">
       <span style="font-size:20px">📞</span>
@@ -155,23 +359,16 @@
   </div>
 </div>
 
-<<<<<<< HEAD
-=======
-<!-- Mata qualquer service worker existente -->
->>>>>>> 1881571 (atualização safari)
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
-    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-  }
-</script>
-
+<!-- Firebase SDK -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
   import {
     getFirestore, doc, getDoc, collection, addDoc, serverTimestamp
   } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
+  // ─────────────────────────────────────────────────────
+  // ⚠️  SUBSTITUA PELAS SUAS CREDENCIAIS DO FIREBASE
+  // ─────────────────────────────────────────────────────
   const firebaseConfig = {
     apiKey: "AIzaSyBDidrDBQC5dvRJGGKMtNffrV867dNgDK8",
     authDomain: "patrulha-maria-da-penha.firebaseapp.com",
@@ -180,80 +377,80 @@
     messagingSenderId: "698468798170",
     appId: "1:698468798170:web:fc881c819ead0e34c11fe3"
   };
+  // ─────────────────────────────────────────────────────
 
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
 
-  function show(id) { document.getElementById(id).classList.remove('hidden'); }
-  function hide(id) { document.getElementById(id).classList.add('hidden'); }
-  function only(id) {
+  // ── helpers ──────────────────────────────────────────
+  function show(id)  { document.getElementById(id).classList.remove('hidden'); }
+  function hide(id)  { document.getElementById(id).classList.add('hidden'); }
+  function only(id)  {
     ['screen-loading','screen-error','screen-sending','screen-main','screen-sent']
       .forEach(s => s === id ? show(s) : hide(s));
   }
 
-  // ── Token: URL tem prioridade, fallback para localStorage ────────────────
   function getToken() {
     const p = new URLSearchParams(location.search);
-    const tokenFromUrl = p.get('token') || p.get('t') || null;
-<<<<<<< HEAD
-  
-    if (tokenFromUrl) {
-      // Salva o token para acessos futuros (ícone da tela inicial)
-      localStorage.setItem('eva_panic_token', tokenFromUrl);
-      return tokenFromUrl;
-    }
-  
-    // Sem token na URL — tenta recuperar do armazenamento local
-=======
-    if (tokenFromUrl) {
-      localStorage.setItem('eva_panic_token', tokenFromUrl);
-      return tokenFromUrl;
-    }
->>>>>>> 1881571 (atualização safari)
-    return localStorage.getItem('eva_panic_token') || null;
+    return p.get('token') || p.get('t') || null;
   }
 
   function formatPhone(tel) {
-    return tel ? tel.replace(/\D/g, '') : null;
+    if (!tel) return null;
+    return tel.replace(/\D/g, '');
   }
 
+  // ── state ─────────────────────────────────────────────
   let assistidaData = null;
+  let lastCoords    = null;
 
+  // ── GPS ───────────────────────────────────────────────
   function getGPS() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!navigator.geolocation) { resolve(null); return; }
       navigator.geolocation.getCurrentPosition(
         pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude, acc: pos.coords.accuracy }),
-        ()   => resolve(null),
+        ()  => resolve(null),
         { timeout: 10000, maximumAge: 0, enableHighAccuracy: true }
       );
     });
   }
 
-<<<<<<< HEAD
-=======
-  // ── Carrega dados somente de panic_tokens (já tem tudo) ──────────────────
->>>>>>> 1881571 (atualização safari)
+  // ── load assistida by token ───────────────────────────
   async function loadAssistida(token) {
     try {
-      const snap = await getDoc(doc(db, 'panic_tokens', token));
-      if (!snap.exists()) { showError('Link inválido ou expirado. Contate a equipe da Patrulha Maria da Penha.'); return; }
-      const d = snap.data();
-      if (d.ativo === false) { showError('Este link foi desativado. Solicite um novo link à equipe.'); return; }
+      // O token é o ID do documento em 'panic_tokens'
+      const tokenRef = doc(db, 'panic_tokens', token);
+      const tokenSnap = await getDoc(tokenRef);
+
+      if (!tokenSnap.exists()) {
+        showError('Link inválido ou expirado. Contate a equipe da Patrulha Maria da Penha.');
+        return;
+      }
+
+      const tokenData = tokenSnap.data();
+      if (tokenData.ativo === false) {
+        showError('Este link foi desativado. Solicite um novo link à equipe.');
+        return;
+      }
+
+      const assistidaId = tokenData.idAssistida;
+      const assistidaRef = doc(db, 'assistidas', assistidaId);
+      const assistidaSnap = await getDoc(assistidaRef);
+
+      if (!assistidaSnap.exists()) {
+        showError('Cadastro não encontrado. Contate a equipe.');
+        return;
+      }
+
       assistidaData = {
-<<<<<<< HEAD
-        id: d.idAssistida, token,
-        nomeCompleto:  d.nomeAssistida || '',
-        guarnicaoTel:  d.guarnicaoTel  || null,
-        guarnicaoNome: d.guarnicaoNome || null,
-=======
-        id:            d.idAssistida,
+        id: assistidaSnap.id,
         token,
-        nomeCompleto:  d.nomeAssistida  || '',
-        guarnicaoTel:  d.guarnicaoTel   || null,
-        guarnicaoNome: d.guarnicaoNome  || null,
->>>>>>> 1881571 (atualização safari)
+        ...assistidaSnap.data(),
+        guarnicaoTel: tokenData.guarnicaoTel || assistidaSnap.data()?.guarnicaoTel || null,
+        guarnicaoNome: tokenData.guarnicaoNome || assistidaSnap.data()?.guarnicao || null,
       };
+
       renderMain();
     } catch (err) {
       console.error(err);
@@ -261,57 +458,98 @@
     }
   }
 
+  // ── render main screen ────────────────────────────────
   function renderMain() {
-    const guarTel = assistidaData.guarnicaoTel || null;
-    document.getElementById('nome-assistida').textContent = assistidaData.nomeCompleto || 'Assistida';
-    document.getElementById('guarnicao-assistida').textContent = assistidaData.guarnicaoNome ? `Guarnição: ${assistidaData.guarnicaoNome}` : '';
-    const tel = guarTel || 'Não configurado';
-    document.getElementById('guarnicao-tel-display').textContent   = tel;
-    document.getElementById('guarnicao-tel-display-2').textContent = tel;
-    document.getElementById('btn-190').onclick            = () => call('190');
-    document.getElementById('btn-190-sent').onclick       = () => call('190');
-    document.getElementById('btn-guarnicao').onclick      = () => guarTel && call(guarTel);
-    document.getElementById('btn-guarnicao-sent').onclick = () => guarTel && call(guarTel);
+    const nome = assistidaData?.nomeCompleto || 'Assistida';
+    const guarNome = assistidaData?.guarnicaoNome || '';
+    const guarTel  = assistidaData?.guarnicaoTel || null;
+
+    document.getElementById('nome-assistida').textContent = nome;
+    document.getElementById('guarnicao-assistida').textContent =
+      guarNome ? `Guarnição: ${guarNome}` : '';
+
+    const telDisplay = guarTel ? guarTel : 'Não configurado';
+    document.getElementById('guarnicao-tel-display').textContent   = telDisplay;
+    document.getElementById('guarnicao-tel-display-2').textContent = telDisplay;
+
+    // call buttons
+    document.getElementById('btn-190').onclick       = () => call('190');
+    document.getElementById('btn-190-sent').onclick  = () => call('190');
+    document.getElementById('btn-guarnicao').onclick = () => guarTel ? call(guarTel) : null;
+    document.getElementById('btn-guarnicao-sent').onclick = () => guarTel ? call(guarTel) : null;
+
     if (!guarTel) {
-      document.getElementById('btn-guarnicao').style.opacity      = '0.4';
+      document.getElementById('btn-guarnicao').style.opacity = '0.4';
       document.getElementById('btn-guarnicao-sent').style.opacity = '0.4';
     }
+
     only('screen-main');
   }
 
-  function call(n) { window.location.href = `tel:${formatPhone(n)}`; }
-  function showError(msg) { document.getElementById('error-msg').textContent = msg; only('screen-error'); }
+  function call(number) {
+    window.location.href = `tel:${formatPhone(number)}`;
+  }
 
+  function showError(msg) {
+    document.getElementById('error-msg').textContent = msg;
+    only('screen-error');
+  }
+
+  // ── PANIC ACTION ──────────────────────────────────────
   document.getElementById('btn-panic').addEventListener('click', async () => {
     only('screen-sending');
+
+    // 1. Captura GPS
     const coords = await getGPS();
+    lastCoords = coords;
+
+    // 2. Salva no Firestore
     try {
       await addDoc(collection(db, 'alertas_panico'), {
-        idAssistida:    assistidaData.id,
-        nomeAssistida:  assistidaData.nomeCompleto  || '',
-        guarnicao:      assistidaData.guarnicaoNome || '',
-        guarnicaoTel:   assistidaData.guarnicaoTel  || '',
-        token:          assistidaData.token,
-        latitude:       coords?.lat ?? null,
-        longitude:      coords?.lng ?? null,
+        idAssistida:   assistidaData.id,
+        nomeAssistida: assistidaData.nomeCompleto || '',
+        guarnicao:     assistidaData.guarnicaoNome || '',
+        guarnicaoTel:  assistidaData.guarnicaoTel || '',
+        token:         assistidaData.token,
+        latitude:      coords?.lat ?? null,
+        longitude:     coords?.lng ?? null,
         precisaoMetros: coords?.acc ?? null,
-        timestamp:      serverTimestamp(),
-        status:         'pendente',
-        origem:         'pwa',
+        timestamp:     serverTimestamp(),
+        status:        'pendente',
+        origem:        'pwa',
       });
-    } catch (err) { console.error('Firestore error:', err); }
+    } catch (err) {
+      console.error('Firestore error:', err);
+      // continua mesmo se falhar — GPS e ligação ainda funcionam
+    }
+
+    // 3. Mostra tela de confirmação
     if (coords) {
-      document.getElementById('gps-coords').textContent = `Lat: ${coords.lat.toFixed(6)}, Lng: ${coords.lng.toFixed(6)} (±${Math.round(coords.acc)}m)`;
+      document.getElementById('gps-coords').textContent =
+        `Lat: ${coords.lat.toFixed(6)}, Lng: ${coords.lng.toFixed(6)} (±${Math.round(coords.acc)}m)`;
       document.getElementById('gps-info').style.display = 'block';
     }
+
     only('screen-sent');
   });
 
-  document.getElementById('btn-back').addEventListener('click', () => only('screen-main'));
+  // ── back button ───────────────────────────────────────
+  document.getElementById('btn-back').addEventListener('click', () => {
+    only('screen-main');
+  });
 
+  // ── service worker ────────────────────────────────────
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(console.warn);
+  }
+
+  // ── INIT ──────────────────────────────────────────────
   const token = getToken();
-  if (!token) { showError('Nenhum token encontrado na URL. O link está incompleto.'); }
-  else { loadAssistida(token); }
+  if (!token) {
+    showError('Nenhum token encontrado na URL. O link está incompleto.');
+  } else {
+    loadAssistida(token);
+  }
 </script>
 </body>
 </html>
