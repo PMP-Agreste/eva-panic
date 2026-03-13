@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Eva Pânico" />
-  <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" href="/manifest.json" />
   <title>Eva — Botão de Pânico</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap');
@@ -184,29 +184,27 @@
       .forEach(s => s === id ? show(s) : hide(s));
   }
 
-  // ── Token: URL → hash → localStorage → sessionStorage ───────────────────
-  // O Safari no iOS preserva o #hash ao salvar na tela inicial,
-  // mesmo descartando os query params (?token=...).
+  // ── Token: lê do PATH /t/TOKEN_ID (iOS preserva o caminho ao salvar na tela inicial)
+  // Fallback para ?token= e localStorage para compatibilidade com links antigos
   function getToken() {
+    // 1. Caminho /t/TOKEN — método principal (iOS compatível)
+    const pathMatch = location.pathname.match(/^\/t\/([^/]+)/);
+    if (pathMatch) {
+      const t = pathMatch[1];
+      try { localStorage.setItem('eva_panic_token', t); } catch(e) {}
+      return t;
+    }
+
+    // 2. Query param ?token= — compatibilidade com links antigos
     const p = new URLSearchParams(location.search);
     const tokenFromUrl = p.get('token') || p.get('t') || null;
-
     if (tokenFromUrl) {
-      // Salva em todos os storages disponíveis
       try { localStorage.setItem('eva_panic_token', tokenFromUrl); } catch(e) {}
-      try { sessionStorage.setItem('eva_panic_token', tokenFromUrl); } catch(e) {}
-      // Coloca no hash — iOS Safari preserva o hash ao salvar na tela inicial
-      try { history.replaceState(null, '', `${location.pathname}?token=${tokenFromUrl}#${tokenFromUrl}`); } catch(e) {}
       return tokenFromUrl;
     }
 
-    // Tenta recuperar do hash (mais confiável no iOS após instalar)
-    const fromHash = location.hash ? location.hash.replace('#', '') : null;
-    if (fromHash && fromHash.length > 10) return fromHash;
-
-    // Fallbacks
+    // 3. localStorage — último fallback
     try { const t = localStorage.getItem('eva_panic_token'); if (t) return t; } catch(e) {}
-    try { const t = sessionStorage.getItem('eva_panic_token'); if (t) return t; } catch(e) {}
 
     return null;
   }
