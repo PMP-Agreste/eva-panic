@@ -424,6 +424,7 @@
         origem:         'pwa',
       });
       alertaId = docRef.id;
+      try { localStorage.setItem('eva_alerta_id', alertaId); } catch(e) {}
     } catch (err) {
       console.error('Firestore error:', err);
     }
@@ -462,12 +463,30 @@
     stopListeners();
     alertaSent = false;
     btnPanic.disabled = false;
+    try { localStorage.removeItem('eva_alerta_id'); } catch(e) {}
     only('screen-main');
   });
 
   const token = getToken();
   if (!token) { showError('Nenhum token encontrado na URL. O link está incompleto.'); }
-  else { loadAssistida(token); }
+  else {
+    loadAssistida(token);
+
+    // Retoma listener se há alerta ativo salvo (sobrevive a refresh)
+    try {
+      const savedAlertaId = localStorage.getItem('eva_alerta_id');
+      if (savedAlertaId) {
+        // Aguarda loadAssistida terminar antes de mostrar tela de alerta
+        setTimeout(() => {
+          only('screen-sent');
+          document.getElementById('status-badge').className = 'status-badge pendente';
+          document.getElementById('status-text').textContent = 'Aguardando resposta da equipe…';
+          document.getElementById('gps-info').style.display = 'none';
+          listenAlertaStatus(savedAlertaId);
+        }, 1500);
+      }
+    } catch(e) {}
+  }
 </script>
 </body>
 </html>
